@@ -1,4 +1,5 @@
 PACKAGE ?= github.com/sosedoff/tm-snapshot-uploader
+DOCKER_IMAGE ?= tm-snapshot-uploader
 
 .PHONY: build
 build:
@@ -6,4 +7,4 @@ build:
 
 .PHONY: docker
 docker:
-	docker build --build-arg=PACKAGE=$(PACKAGE) -t tm-snapshot-uploader .
+	docker build --build-arg=PACKAGE=$(PACKAGE) -t $(DOCKER_IMAGE) .
