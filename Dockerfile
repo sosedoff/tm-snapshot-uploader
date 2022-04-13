@@ -34,4 +34,10 @@ COPY --from=build \
   /go/src/${PACKAGE}/build/tm-snapshot-uploader \
   /app/tm-snapshot-uploader
 
+RUN addgroup --gid 1234 app && \
+    adduser --system --uid 1234 app && \
+    chown -R app:app /app
+
+USER 1234
+
 ENTRYPOINT ["/app/tm-snapshot-uploader"]
