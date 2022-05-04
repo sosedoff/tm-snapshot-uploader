@@ -57,7 +57,7 @@ func main() {
 		config.WithLogLevel(aws.LogDebug)
 	}
 
-	sess := session.New(config)
+	sess := session.Must(session.NewSession(config))
 	uploader := s3manager.NewUploader(sess)
 
 	for {
