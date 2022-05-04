@@ -27,6 +27,7 @@ var cliOpts = struct {
 	prefix string
 	dir    string
 	watch  bool
+	debug  bool
 }{}
 
 func init() {
@@ -35,6 +36,7 @@ func init() {
 	flag.StringVar(&cliOpts.prefix, "prefix", "", "Prefix name for uploads in the bucket")
 	flag.StringVar(&cliOpts.dir, "dir", "", "Directory containing height snapshots")
 	flag.BoolVar(&cliOpts.watch, "watch", false, "Run in watch mode (periodically scan dir)")
+	flag.BoolVar(&cliOpts.debug, "debug", false, "Enable AWS debugging")
 	flag.Parse()
 
 	if cliOpts.dir == "" {
@@ -47,9 +49,15 @@ func init() {
 }
 
 func main() {
-	sess := session.New(&aws.Config{
+	config := &aws.Config{
 		Region: aws.String(cliOpts.region),
-	})
+	}
+	if cliOpts.debug {
+		log.Println("AWS debug logging is enabled")
+		config.WithLogLevel(aws.LogDebug)
+	}
+
+	sess := session.New(config)
 	uploader := s3manager.NewUploader(sess)
 
 	for {
